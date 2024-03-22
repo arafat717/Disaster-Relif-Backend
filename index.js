@@ -117,7 +117,6 @@ async function run() {
       }
     });
 
-    // DELETE route to delete a donation by ID
     app.delete("/api/v1/donations/:id", async (req, res) => {
       try {
         const id = req.params.id;
