@@ -89,6 +89,8 @@ async function run() {
       .db("disater-db")
       .collection("all-disaster");
 
+    const donersCollection = client.db("disater-db").collection("donars");
+
     //   get all donations
     app.get("/api/v1/donations", async (req, res) => {
       const result = await donationCollection.find().toArray();
@@ -151,6 +153,15 @@ async function run() {
         console.error("Error occurred while updating donation:", error);
         res.status(500).send("Error occurred while updating donation");
       }
+    });
+
+    //   get all donations
+    app.get("/api/v1/doners", async (req, res) => {
+      const result = await donersCollection
+        .find()
+        .sort({ amount: -1 })
+        .toArray();
+      res.send(result);
     });
 
     // Start the server
