@@ -81,6 +81,11 @@ async function run() {
       });
     });
 
+    app.get("/api/v1/users", async (req, res) => {
+      const result = await collection.find().toArray();
+      res.send(result);
+    });
+
     // ==============================================================
     // WRITE YOUR CODE HERE
     // ==============================================================
@@ -90,6 +95,11 @@ async function run() {
       .collection("all-disaster");
 
     const donersCollection = client.db("disater-db").collection("donars");
+    const communityCollection = client.db("disater-db").collection("community");
+    const volunteerCollection = client.db("disater-db").collection("volunteer");
+    const testominalCollection = client
+      .db("disater-db")
+      .collection("testominal");
 
     //   get all donations
     app.get("/api/v1/donations", async (req, res) => {
@@ -160,6 +170,62 @@ async function run() {
         .find()
         .sort({ amount: -1 })
         .toArray();
+      res.send(result);
+    });
+
+    // community apis
+
+    app.post("/api/v1/community", async (req, res) => {
+      try {
+        const newComment = req.body;
+        const result = await communityCollection.insertOne(newComment);
+        // res.status(201).send(result.ops[0]);
+        res.send(result);
+      } catch (error) {
+        console.error("Error occurred while adding donation:", error);
+        res.status(500).send("Error occurred while adding donation");
+      }
+    });
+
+    app.get("/api/v1/community", async (req, res) => {
+      const result = await communityCollection
+        .find()
+        .sort({ timestamp: -1 })
+        .toArray();
+      res.send(result);
+    });
+
+    app.post("/api/v1/volunteer", async (req, res) => {
+      try {
+        const volunteer = req.body;
+        const result = await volunteerCollection.insertOne(volunteer);
+        // res.status(201).send(result.ops[0]);
+        res.send(result);
+      } catch (error) {
+        console.error("Error occurred while adding donation:", error);
+        res.status(500).send("Error occurred while adding donation");
+      }
+    });
+
+    app.get("/api/v1/volunteer", async (req, res) => {
+      const result = await volunteerCollection.find().toArray();
+      res.send(result);
+    });
+
+    app.post("/api/v1/testominal", async (req, res) => {
+      try {
+        const volunteer = req.body;
+        const result = await testominalCollection.insertOne(volunteer);
+        // res.status(201).send(result.ops[0]);
+        res.send(result);
+      } catch (error) {
+        console.error("Error occurred while adding donation:", error);
+        res.status(500).send("Error occurred while adding donation");
+      }
+    });
+
+    app.get("/api/v1/testominal", async (req, res) => {
+      const result = await testominalCollection.find().toArray();
       res.send(result);
     });
 
